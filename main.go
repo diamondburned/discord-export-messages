@@ -23,7 +23,7 @@ var (
 	outputMode   = flags.NewStringEnum("md", "json")
 	outputFile   = "output"
 	mdAllowHTML  = true
-	mdDateFormat = "01/02 03:04 PM"
+	mdDateFormat = "01/02/2006 03:04 PM"
 	discordToken = os.Getenv("DISCORD_TOKEN")
 )
 
