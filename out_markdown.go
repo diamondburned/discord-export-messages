@@ -12,9 +12,12 @@ import (
 	"regexp"
 	"slices"
 	"strings"
+	"time"
 
 	"github.com/diamondburned/arikawa/v3/discord"
 )
+
+const collapseDuration = 5 * time.Minute // 5 minutes
 
 type markdownContentKey struct {
 	id      discord.MessageID
@@ -47,7 +50,9 @@ func formatMarkdownMessages(_ context.Context, w io.Writer, msgs []discord.Messa
 	}
 
 	for i, msg := range msgs {
-		collapse := i > 0 && msg.Author.ID == msgs[i-1].Author.ID
+		collapse := i > 0 &&
+			msg.Author.ID == msgs[i-1].Author.ID &&
+			msg.Timestamp.Time().Sub(msgs[i-1].Timestamp.Time()) < collapseDuration
 		if !collapse {
 			if i > 0 {
 				fmt.Fprintf(bw, "\n")
